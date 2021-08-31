@@ -1,5 +1,5 @@
 from schemas import UserSchema
-from pydantic_models import UserPd
+from pydantic_models import UserSignInPd
 from db_session import create_session
 from passlib.hash import pbkdf2_sha256
 
@@ -12,7 +12,7 @@ def make_hashed_password(password):
     return pbkdf2_sha256.hash(password)
 
 
-def get_hashed_password(user: UserPd):
+def get_hashed_password(user: UserSignInPd):
     session = create_session()
     hashed_password = session.query(UserSchema).filter(UserSchema.email == user.email)
     session.close()
