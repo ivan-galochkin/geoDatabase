@@ -7,6 +7,7 @@ postgres-build:
     - docker pull postgres
   script:
     - docker run -d --name geo_db -e POSTGRES_USER="ivan_galochkin" -e POSTGRES_PASSWORD="Yazapytina1" -e POSTGRES_DB="geodb" postgres
+    - docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' geo_db
 docker-build:
   image: docker:latest
   stage: build
