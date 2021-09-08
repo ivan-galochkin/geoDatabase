@@ -18,7 +18,7 @@ docker-build:
       fi
     - docker build --build-arg SECRET_KEY="$SECRET_KEY" --build-arg JWT_SECRET="$JWT_SECRET" --build-arg db_password="$db_password" --pull  -t "$CI_REGISTRY_IMAGE${tag}" .
     - docker push "$CI_REGISTRY_IMAGE${tag}"
-    - docker run --env DATABASE_URL="$DATABASE_URL" --env SECRET_KEY="$SECRET_KEY" --env JWT_SECRET="$JWT_SECRET" --env db_password="$db_password" "$CI_REGISTRY_IMAGE${tag}"
+    - docker run --network=host --env DATABASE_URL="$DATABASE_URL" --env SECRET_KEY="$SECRET_KEY" --env JWT_SECRET="$JWT_SECRET" --env db_password="$db_password" "$CI_REGISTRY_IMAGE${tag}"
 
   rules:
     - if: $CI_COMMIT_BRANCH
