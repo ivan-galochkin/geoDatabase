@@ -15,9 +15,13 @@ class UserSignInPd(BaseModel):
 class QuizResultsPd(BaseModel):
     headers: dict
     quiz: str
-    time: int
     points: int
 
 
 class RefreshTokenPd(BaseModel):
     refresh_token: str
+
+
+class LeaderboardPd(BaseModel):
+    headers: dict
+    tables: list

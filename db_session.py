@@ -1,23 +1,22 @@
+import os
 from typing import Optional, Callable
 
 import sqlalchemy as sa
 from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 
+PASSWORD = os.environ["db_password"]
 Base = declarative_base()
 
 __factory: Optional[Callable[[], orm.Session]] = None
 
 
-def global_init(db_file):
+def global_init():
     global __factory
     if __factory:
         return
 
-    if not db_file or not db_file.strip():
-        raise Exception("Необходимо указать файл базы данных.")
-
-    conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
+    conn_str = f'postgresql://ivan_galochkin:{PASSWORD}@188.119.67.135/geodb'
     print(f"Подключение к базе данных по адресу {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=True)

@@ -14,7 +14,7 @@ from jwt_service import create_response, decode_jwt
 
 app = FastAPI()
 
-global_init('db.sqlite')
+global_init()
 
 origins = [
     "http://localhost:8080",
@@ -36,6 +36,17 @@ def create_user(user: UserSignUpPd):
     new_user.password = make_hashed_password(user.password)
     new_user.quiz_results = [QuizResultsSchema()]
     return new_user
+
+
+def check_access_token(payload):
+    access_token = payload.headers["access_token"]
+    decoded_token = decode_jwt(access_token)
+    if decoded_token == "expired":
+        raise HTTPException(status_code=401, detail="token expired")
+    elif decoded_token == "wrong token":
+        raise HTTPException(status_code=401, detail="wrong token")
+
+    return decoded_token
 
 
 @app.post("/users/sign_in", status_code=200)
@@ -73,21 +84,15 @@ def sign_up(user: UserSignUpPd):
 
 @app.post("/api/quiz-results")
 def quiz_results(results: QuizResultsPd):
-    access_token = results.headers["access_token"]
-    decoded_token = decode_jwt(access_token)
-    if decoded_token == "expired":
-        raise HTTPException(status_code=401, detail="token expired")
-    elif decoded_token == "wrong token":
-        raise HTTPException(status_code=401, detail="wrong token")
-
+    decoded_token = check_access_token(results)
     session = create_session()
     try:
-        db_results = session.query(QuizResultsSchema).filter(decoded_token["user_id"] == QuizResultsSchema.id).one()
-        db_points = getattr(db_results, results.quiz)
-        db_points = results.points
+        db_results = session.query(QuizResultsSchema).filter(QuizResultsSchema.id == decoded_token["user_id"]).one()
+        setattr(db_results, results.quiz, results.points)
         session.commit()
-    except BaseException as exc:
-        print(exc)
+        return "ok"
+    except sqlalchemy.exc.NoResultFound:
+        raise HTTPException(status_code=422, detail="server_error")
     finally:
         session.close()
 
@@ -101,10 +106,32 @@ def send_tokens(payload: RefreshTokenPd):
 
         response = create_response(db_user)
         db_user.refresh_token = response['tokens']['refresh_token']
+        session.commit()
 
         return response
     except sqlalchemy.exc.NoResultFound:
         raise HTTPException(status_code=401, detail='refresh_token expired')
+
+
+@app.post("/users/leaderboard")
+def send_leaderboard(payload: LeaderboardPd):
+    print(payload)
+    create_leaderboard(payload.tables)
+
+
+def create_leaderboard(tables):
+    session = create_session()
+    try:
+        response = {}
+        for table in tables:
+            users = session.execute(f"SELECT username, SUM({table}) FROM quiz_results JOIN users u on u.uid = quiz_results.id").fetchall()
+            response[table] = users
+        return response
+    except sqlalchemy.exc.NoResultFound:
+        print('bad')
+
+    finally:
+        session.close()
 
 
 uvicorn.run(app, host="127.0.0.1", port=8000)
