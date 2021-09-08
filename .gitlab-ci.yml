@@ -1,8 +1,8 @@
 postgres-build:
-  image: postgres
+  image: docker:latest
   stage: build
   before_script:
-    - docker images
+    - docker pull postgres
   script:
     - docker run -d \
       --name geo_db \
