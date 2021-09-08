@@ -4,4 +4,4 @@ EXPOSE 8000
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 COPY . .
-exec python3 /usr/src/geo_database/auth.py
+CMD ["/usr/src/geo_database/auth.py"]
