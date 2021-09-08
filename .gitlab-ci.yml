@@ -1,9 +1,21 @@
+postgres-build:
+  image: postgres
+  stage: build
+  before_script:
+    - docker images
+  script:
+    docker run -d \
+    --name geo_db \
+    -e POSTGRES_USER=ivan_galochkin \
+    -e POSTGRES_PASSWORD=Yazapytina1 \
+    -e POSTGRES_DB=geodb \
+    postgres
+
 docker-build:
   image: docker:latest
   stage: build
   services:
     - docker:dind
-    - postgres:12.2-alpine
   before_script:
     - docker info
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
