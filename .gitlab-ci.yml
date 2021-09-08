@@ -1,6 +1,8 @@
 postgres-build:
   image: docker:latest
   stage: build
+  services:
+    - docker:dind
   before_script:
     - docker pull postgres
   script:
