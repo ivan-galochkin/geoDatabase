@@ -2,7 +2,6 @@ docker-build:
   image: docker:latest
   stage: build
   services:
-    - postgres:12.2-alpine
     - docker:dind
   before_script:
     - docker info
@@ -28,8 +27,4 @@ docker-build:
     SECRET_KEY: $SECRET_KEY
     JWT_SECRET: $JWT_SECRET
     db_password: $db_password
-    POSTGRES_DB: $POSTGRES_DB
-    POSTGRES_USER: $POSTGRES_USER
-    POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     DATABASE_URL: $DATABASE_URL
-    POSTGRES_HOST_AUTH_METHOD: trust
