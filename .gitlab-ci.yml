@@ -3,9 +3,10 @@ docker-build:
   stage: build
   tags:
     - develop
-  script:
+  before-script:
     - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bindocker-compose
     - chmod +x /usr/local/bin/docker-compose
+  script:
     - docker-compose up --build -d
     - docker-compose logs --tail 200
 
