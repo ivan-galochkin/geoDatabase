@@ -5,8 +5,10 @@ services:
     build: ./
 
     environment:
-      - DB_PORT=5432
-      - DB_HOST=postgres
+      - JWT_SECRET=$JWT_SECRET
+      - SECRET_KEY=$SECRET_KEY
+      - DATABASE_URL=$DATABASE_URL
+      - db_password=$db_password
 
     volumes:
       - /home/gitlab-runner/database:/home/geodb/db
@@ -31,8 +33,3 @@ services:
     volumes:
       - data/db:/var/lib/postgresql/data
 
-    
-    
-    POSTGRES_DB: $POSTGRES_DB
-    POSTGRES_USER: $POSTGRES_USER
-    POSTGRES_PASSWORD: $POSTGRES_PASSWORD
