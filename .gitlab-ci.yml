@@ -4,8 +4,8 @@ docker-build:
   tags:
     - develop
   script:
-    - sudo docker-compose up --build -d
-    - sudo docker-compose logs --tail 200
+    - docker-compose up --build -d
+    - docker-compose logs --tail 200
 
   rules:
     - if: $CI_COMMIT_BRANCH
