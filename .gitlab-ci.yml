@@ -5,8 +5,6 @@ docker-build:
     - docker:dind  
   tags:
     - develop
-  before_script:
-    - sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   script:
     - docker-compose up --build -d
     - docker-compose logs --tail 200
