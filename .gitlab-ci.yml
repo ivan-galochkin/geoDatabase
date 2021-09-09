@@ -1,24 +1,15 @@
 docker-build:
-  image: docker:latest
+  image: docker
   stage: build
   services:
-    - docker:dind
-    - postgres:12.2-alpine
+    - docker:dind  
+  tags:
+    - develop
   before_script:
-    - docker info
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - apk add --no-cache docker-compose
   script:
-    - |
-      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-        tag=""
-        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
-      else
-        tag=":$CI_COMMIT_REF_SLUG"
-        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
-      fi
-    - docker build --build-arg SECRET_KEY="$SECRET_KEY" --build-arg JWT_SECRET="$JWT_SECRET" --build-arg db_password="$db_password" --pull  -t "$CI_REGISTRY_IMAGE${tag}" .
-    - docker push "$CI_REGISTRY_IMAGE${tag}"
-    - docker run --env DATABASE_URL="$DATABASE_URL" --env SECRET_KEY="$SECRET_KEY" --env JWT_SECRET="$JWT_SECRET" --env db_password="$db_password" "$CI_REGISTRY_IMAGE${tag}"
+    - docker-compose up --build -d
+    - docker-compose logs --tail 200
 
   rules:
     - if: $CI_COMMIT_BRANCH
@@ -28,8 +19,4 @@ docker-build:
     SECRET_KEY: $SECRET_KEY
     JWT_SECRET: $JWT_SECRET
     db_password: $db_password
-    POSTGRES_DB: $POSTGRES_DB
-    POSTGRES_USER: $POSTGRES_USER
-    POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     DATABASE_URL: $DATABASE_URL
-    POSTGRES_HOST_AUTH_METHOD: trust
