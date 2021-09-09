@@ -3,11 +3,6 @@ docker-build:
   stage: build
   tags:
     - develop
-  services:
-    - docker:dind
-  before_script:
-    - docker info
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - sudo docker-compose up --build -d
     - sudo docker-compose logs --tail 200
