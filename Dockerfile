@@ -4,7 +4,11 @@ WORKDIR /usr/src/geo_database
 RUN pip3 install -r requirements.txt
 ARG SECRET_KEY
 ARG JWT_SECRET
-ARG db_password
+ARG POSTGRES_PASSWORD
+ARG POSTGRES_DB
+ARG DB_HOST
+ARG DB_PORT
+ARG POSTGRES_USER
 ARG DATABASE_URL
 EXPOSE 8000
 CMD ["python3", "auth.py"]
