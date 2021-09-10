@@ -5,13 +5,13 @@ services:
     build: ./
 
     environment:
-      JWT_SECRET=$JWT_SECRET
-      SECRET_KEY=$SECRET_KEY
-      DB_PASSWORD=$DB_PASSWORD
-      POSTGRES_DB=$POSTGRES_DB
-      POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-      DB_HOST=$DB_HOST
-      DB_PORT=$DB_PORT
+      - JWT_SECRET=${JWT_SECRET}
+      - SECRET_KEY=${SECRET_KEY}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
 
     ports:
       - 8000:8000
@@ -23,10 +23,10 @@ services:
     command: [ "postgres", "-c", "log_statement=all", "-c", "log_destination=stderr" ]
 
     environment:
-      POSTGRES_USER=$POSTGRES_USER
-      POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-      POSTGRES_DB=$POSTGRES_DB
-      POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST_AUTH_METHOD=trust
 
     ports:
       - 5432:5432
