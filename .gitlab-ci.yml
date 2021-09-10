@@ -13,8 +13,3 @@ docker-build:
     - if: $CI_COMMIT_BRANCH
       exists:
         - Dockerfile
-  variables:
-    SECRET_KEY: $SECRET_KEY
-    JWT_SECRET: $JWT_SECRET
-    db_password: $db_password
-    DATABASE_URL: $DATABASE_URL
