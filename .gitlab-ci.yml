@@ -20,6 +20,3 @@ docker-build:
     - if: $CI_COMMIT_BRANCH
       exists:
         - Dockerfile
-test-variables:
-  script:
-    - echo $JWT_SECRET
