@@ -12,12 +12,13 @@ docker-build:
     - if: $CI_COMMIT_BRANCH
       exists:
         - Dockerfile
-  variables:
-    - JWT_SECRET: "${JWT_SECRET}"
-    - SECRET_KEY: "${SECRET_KEY}"
-    - DB_PASSWORD: "${DB_PASSWORD}"
-    - POSTGRES_DB: "${POSTGRES_DB}"
-    - POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-    - DB_HOST: "${DB_HOST}"
-    - DB_PORT: "${DB_PORT}"
+
+variables:
+  - JWT_SECRET: "${JWT_SECRET}"
+  - SECRET_KEY: "${SECRET_KEY}"
+  - DB_PASSWORD: "${DB_PASSWORD}"
+  - POSTGRES_DB: "${POSTGRES_DB}"
+  - POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+  - DB_HOST: "${DB_HOST}"
+  - DB_PORT: "${DB_PORT}"
 
