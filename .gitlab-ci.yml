@@ -5,18 +5,11 @@ docker-build:
     - docker:dind  
   tags:
     - develop
-  before_script:
-    - apk add --no-cache docker-compose
   script:
-    - docker-compose up --build -d
-    - docker-compose logs --tail 200
+    - sudo docker-compose up --build -d
+    - sudo docker-compose logs --tail 200
 
   rules:
     - if: $CI_COMMIT_BRANCH
       exists:
         - Dockerfile
-  variables:
-    SECRET_KEY: $SECRET_KEY
-    JWT_SECRET: $JWT_SECRET
-    db_password: $db_password
-    DATABASE_URL: $DATABASE_URL
