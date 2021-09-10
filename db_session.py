@@ -7,14 +7,11 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from urllib import parse
 
-
-PASSWORD = os.environ["db_password"]
-
-db_name = os.environ['DB_NAME']
-db_password = os.environ['DB_PASSWORD']
+db_name = os.environ['POSTGRES_DB']
+db_password = os.environ['POSTGRES_PASSWORD']
 db_host = os.environ['DB_HOST']
 db_port = os.environ['DB_PORT']
-db_user = os.environ['DB_USER']
+db_user = os.environ['POSTGRES_USER']
 
 
 Base = declarative_base()
