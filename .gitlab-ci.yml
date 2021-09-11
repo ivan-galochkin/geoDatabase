@@ -5,14 +5,6 @@ docker-build:
     - docker:dind  
   tags:
     - develop
-  variables:
-    JWT_SECRET: $JWT_SECRET
-    SECRET_KEY: $SECRET_KEY
-    DB_PASSWORD: $DB_PASSWORD
-    POSTGRES_DB: $POSTGRES_DB
-    POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-    DB_HOST: $DB_HOST
-    DB_PORT: $DB_PORT
   script:
     - sudo docker-compose up --build -d
     - sudo docker-compose logs --tail 200
