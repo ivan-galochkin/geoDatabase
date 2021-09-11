@@ -6,6 +6,15 @@ docker-build:
   tags:
     - develop
   script:
+    - echo JWT_SECRET=$JWT_SECRET >> .env
+    - echo SECRET_KEY=$SECRET_KEY >> .env
+    - echo DB_PASSWORD=$DB_PASSWORD >> .env
+    - echo POSTGRES_DB=$POSTGRES_DB >> .env
+    - echo POSTGRES_PASSWORD=$POSTGRES_PASSWORD >> .env
+    - echo DB_HOST=$DB_HOST >> .env
+    - echo DB_PORT=DB_PORT >> .env
+    - echo POSTGRES_USER=$POSTGRES_USER >> .env
+
     - sudo docker-compose up --build -d
     - sudo docker-compose logs --tail 200
   rules:
