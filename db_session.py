@@ -13,6 +13,7 @@ db_host = os.environ['DB_HOST']
 db_port = os.environ['DB_PORT']
 db_user = os.environ['POSTGRES_USER']
 
+print(db_port, db_host, db_user, db_password)
 
 Base = declarative_base()
 
@@ -24,7 +25,7 @@ def global_init():
     if __factory:
         return
 
-    db_conn_str = f'postgresql://{db_user}:{parse.quote(db_password)}@{db_host}:{db_port}/{db_name}'
+    db_conn_str = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
     print(f"Подключение к базе данных по адресу {db_conn_str}")
 
     engine = sa.create_engine(db_conn_str, echo=True)
