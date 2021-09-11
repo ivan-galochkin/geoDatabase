@@ -16,7 +16,7 @@ docker-build:
     - echo POSTGRES_USER=$POSTGRES_USER >> .env
 
     - sudo docker-compose stop
-    - sudo docker-compose rm
+    - sudo docker-compose rm -f
     - sudo docker-compose up --build -d --force-recreate
     - sudo docker-compose logs --tail 200
   rules:
