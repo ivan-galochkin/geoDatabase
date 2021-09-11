@@ -5,7 +5,6 @@ import sqlalchemy as sa
 from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 
-from urllib import parse
 
 db_name = os.environ['POSTGRES_DB']
 db_password = os.environ['POSTGRES_PASSWORD']
