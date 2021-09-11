@@ -15,8 +15,6 @@ docker-build:
     - echo DB_PORT=$DB_PORT >> .env
     - echo POSTGRES_USER=$POSTGRES_USER >> .env
 
-    - docker-compose down
-
     - sudo docker-compose up --build -d --force-recreate
     - sudo docker-compose logs --tail 200
   rules:
