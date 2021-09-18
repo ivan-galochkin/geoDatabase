@@ -18,6 +18,7 @@ global_init()
 
 origins = [
     "http://localhost:8080",
+    "https://earth-quiz.uk"
 ]
 
 app.add_middleware(
