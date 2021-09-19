@@ -34,9 +34,4 @@ services:
 
     volumes:
       - /home/gitlab-runner/database:/home/geodb/db
-    
-    networks:
-      - app
 
-networks:
-  app:
