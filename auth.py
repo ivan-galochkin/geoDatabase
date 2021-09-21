@@ -119,6 +119,11 @@ def send_leaderboard(payload: LeaderboardPd):
     print(payload)
     create_leaderboard(payload.tables)
 
+@app.post("/test")
+def test(string: str):
+    print(string)
+    return "ok"
+
 
 def create_leaderboard(tables):
     session = create_session()
