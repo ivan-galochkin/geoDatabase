@@ -119,6 +119,7 @@ def send_leaderboard(payload: LeaderboardPd):
     print(payload)
     create_leaderboard(payload.tables)
 
+
 @app.post("/test")
 def test(string: str):
     print(string)
@@ -130,7 +131,8 @@ def create_leaderboard(tables):
     try:
         response = {}
         for table in tables:
-            users = session.execute(f"SELECT username, SUM({table}) FROM quiz_results JOIN users u on u.uid = quiz_results.id").fetchall()
+            users = session.execute(
+                f"SELECT username, SUM({table}) FROM quiz_results JOIN users u on u.uid = quiz_results.id").fetchall()
             response[table] = users
         return response
     except sqlalchemy.exc.NoResultFound:
