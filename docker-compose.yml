@@ -37,6 +37,9 @@ services:
 
     volumes:
       - /home/gitlab-runner/database:/home/geodb/db
+      
+    networks:
+      - front-backend
 
 networks:
   front-backend:
