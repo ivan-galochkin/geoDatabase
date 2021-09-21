@@ -1,6 +1,7 @@
 version: '2.2'
 services:
-  app:
+  backend:
+    container_name: geoback
     restart: always
     build: ./
 
@@ -16,6 +17,10 @@ services:
 
     ports:
       - 8000:8000
+    networks:
+      front-backend:
+        aliases:
+          - backend
 
   postgres:
     restart: always
@@ -34,4 +39,11 @@ services:
 
     volumes:
       - /home/gitlab-runner/database:/home/geodb/db
+      
+    networks:
+      - front-backend
+
+networks:
+  front-backend:
+    driver: bridge
 
