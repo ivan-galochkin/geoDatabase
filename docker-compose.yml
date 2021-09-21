@@ -18,7 +18,9 @@ services:
     ports:
       - 8000:8000
     networks:
-      - front-backend
+      front-backend:
+        aliases:
+          - back-end
 
   postgres:
     restart: always
