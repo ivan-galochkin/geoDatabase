@@ -20,7 +20,7 @@ services:
     networks:
       front-backend:
         aliases:
-          - back-end
+          - backend
 
   postgres:
     restart: always
