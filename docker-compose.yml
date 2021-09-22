@@ -17,8 +17,8 @@ services:
 
     ports:
       - 8000:8000
-    networks:
-      - front-backend
+    network_mode: "host"
+
 
   postgres:
     restart: always
@@ -37,11 +37,8 @@ services:
 
     volumes:
       - /home/gitlab-runner/database:/home/geodb/db
-      
-    networks:
-      - front-backend
+    
+    network_mode: "host"
 
-networks:
-  front-backend:
-    driver: bridge
+      
 
