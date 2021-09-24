@@ -1,7 +1,6 @@
 version: '2.2'
 services:
   backend:
-    container_name: geoback
     restart: always
     build: ./
 
