@@ -21,7 +21,9 @@ origins = [
     "https://earth-quiz.uk",
     "https://api.earth-quiz.uk",
     "http://earth-quiz.uk",
-    "http://api.earth-quiz.uk"
+    "http://api.earth-quiz.uk",
+    "https://127.0.0.1"
+    "http://127.0.0.1"
 ]
 
 app.add_middleware(
