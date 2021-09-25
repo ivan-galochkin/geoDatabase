@@ -16,7 +16,7 @@ app = FastAPI()
 
 global_init()
 
-origins = ["*"]
+origins = ["https://earth-quiz.uk/"]
 
 app.add_middleware(
     CORSMiddleware,
