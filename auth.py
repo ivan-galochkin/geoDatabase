@@ -16,20 +16,7 @@ app = FastAPI()
 
 global_init()
 
-origins = [
-    "192.168.48.4",
-    "http://localhost:8080",
-    "https://earth-quiz.uk",
-    "https://api.earth-quiz.uk",
-    "http://earth-quiz.uk",
-    "http://api.earth-quiz.uk",
-    "https://127.0.0.1",
-    "http://127.0.0.1",
-    "www.api.earth-quiz.uk",
-    "api.earth-quiz.uk",
-    "http://192.168.48.4"
-    "https://192.168.48.4"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
