@@ -25,3 +25,7 @@ class RefreshTokenPd(BaseModel):
 class LeaderboardPd(BaseModel):
     headers: dict
     tables: list
+
+
+class TestPd(BaseModel):
+    text: str

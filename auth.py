@@ -118,8 +118,8 @@ def send_leaderboard(payload: LeaderboardPd):
 
 
 @app.post("/test")
-def test(string: str):
-    print(string)
+def test(payload: TestPd):
+    print(payload)
     return "ok"
 
 
