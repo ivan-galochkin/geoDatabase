@@ -11,16 +11,11 @@ from password_service import verify_password, make_hashed_password
 from jwt_service import create_response, decode_jwt
 import platform
 
-
-def joint(freestyle) -> 1:
-    pass
-
-
 app = FastAPI()
 
 global_init()
 
-origins = ["https://earth-quiz.uk/"]
+origins = ["*"]
 
 tables_realised_str = "usa_states, serbia_states"
 tables_realised_list = ["usa_states", "serbia_states"]
@@ -112,7 +107,7 @@ def quiz_results(results: QuizResultsPd):
         db_results = session.query(QuizResultsSchema).filter(QuizResultsSchema.id == decoded_token["user_id"]).one()
         previous_points = getattr(db_results, results.quiz)
         previous_time = getattr(db_results, results.quiz + "_time")
-        if results.points > previous_points:
+        if results.points > previous_points or previous_time is None:
             setattr(db_results, results.quiz, results.points)
             setattr(db_results, results.quiz + "_time", results.time)
             session.commit()
@@ -178,14 +173,20 @@ def send_photo(payload: UserUidPd):
 def send_all_results(payload: UserGetDataPd):
     session = create_session()
     try:
+        data = session.query(QuizResultsSchema).filter(QuizResultsSchema.id == payload.uid).one()
         response = {}
-        # warning! global var tables_realised_list
-        for table in tables_realised_list:
-            users = session.query(QuizResultsSchema).filter(QuizResultsSchema.id == payload.uid).one()
-            print(users)
-            response[table] = users
+        for column in list(vars(data).keys())[1:]:
+            if "id" not in column:
+                if "time" in column:
+                    if response[column.replace("_time", "")]:
+                        response[column.replace("_time", "")] = []
+                    response[column.replace("_time", "")].append({"time": getattr(data, column)})
+                else:
+                    if not response[column]:
+                        response[column] = []
+                    response[column].append({"points": getattr(data, column)})
         return response
-    except BaseException:
+    except sqlalchemy.exc.NoResultFound:
         pass
     finally:
         session.close()

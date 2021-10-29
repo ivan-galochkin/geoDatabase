@@ -5,8 +5,7 @@ import sqlalchemy as sa
 from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 
-
-if platform.system() != "Darwin":
+if platform.system() != "Windows":
     db_name = os.environ['POSTGRES_DB']
     db_password = os.environ['POSTGRES_PASSWORD']
     db_host = os.environ['DB_HOST']
@@ -23,7 +22,7 @@ def global_init():
     if __factory:
         return
 
-    if platform.system() == "Darwin":
+    if platform.system() == "Windows":
         db_conn_str = f'sqlite:///database.sqlite?check_same_thread=False'
     else:
         db_conn_str = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
