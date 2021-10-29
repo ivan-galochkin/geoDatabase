@@ -20,7 +20,7 @@ app = FastAPI()
 
 global_init()
 
-origins = ["*"]
+origins = ["https://earth-quiz.uk/"]
 
 tables_realised_str = "usa_states, serbia_states"
 tables_realised_list = ["usa_states", "serbia_states"]
