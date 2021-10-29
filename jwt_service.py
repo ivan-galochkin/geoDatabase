@@ -11,7 +11,7 @@ JWT_SECRET = os.environ["JWT_SECRET"]
 def create_access_jwt(user_id: int):
     payload = {
         "user_id": user_id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=10)
     }
     access_token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
 
@@ -29,7 +29,8 @@ def create_refresh_jwt(user_id: int):
 
 
 def create_response(user):
-    return {"tokens": {"access_token": create_access_jwt(user.uid), "refresh_token": create_refresh_jwt(user.uid)}}
+    return {"tokens": {"access_token": create_access_jwt(user.uid), "refresh_token": create_refresh_jwt(user.uid)},
+            "user": {"uid": user.uid, "username": user.username}}
 
 
 def decode_jwt(token):

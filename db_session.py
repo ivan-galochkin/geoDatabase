@@ -1,19 +1,17 @@
 import os
 from typing import Optional, Callable
-
+import platform
 import sqlalchemy as sa
 from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
 
-from urllib import parse
 
-db_name = os.environ['POSTGRES_DB']
-db_password = os.environ['POSTGRES_PASSWORD']
-db_host = os.environ['DB_HOST']
-db_port = os.environ['DB_PORT']
-db_user = os.environ['POSTGRES_USER']
-
-print(db_port, db_host, db_user, db_password)
+if platform.system() != "Darwin":
+    db_name = os.environ['POSTGRES_DB']
+    db_password = os.environ['POSTGRES_PASSWORD']
+    db_host = os.environ['DB_HOST']
+    db_port = os.environ['DB_PORT']
+    db_user = os.environ['POSTGRES_USER']
 
 Base = declarative_base()
 
@@ -25,7 +23,10 @@ def global_init():
     if __factory:
         return
 
-    db_conn_str = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
+    if platform.system() == "Darwin":
+        db_conn_str = f'sqlite:///database.sqlite?check_same_thread=False'
+    else:
+        db_conn_str = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
     print(f"Подключение к базе данных по адресу {db_conn_str}")
 
     engine = sa.create_engine(db_conn_str, echo=True)

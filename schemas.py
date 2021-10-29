@@ -19,5 +19,8 @@ class QuizResultsSchema(Base):
     uid = sa.Column(sa.Integer, primary_key=True, unique=True, nullable=False, autoincrement=True)
     id = sa.Column(sa.Integer, sa.ForeignKey('users.uid'), unique=True, nullable=False)
     # points for every quiz
-    usa_states = sa.Column(sa.Integer)
-    serbia_states = sa.Column(sa.Integer)
+    usa_states = sa.Column(sa.Integer, default=0)
+    serbia_states = sa.Column(sa.Integer, default=0)
+    # time
+    usa_states_time = sa.Column(sa.Interval)
+    serbia_states_time = sa.Column(sa.Interval)
