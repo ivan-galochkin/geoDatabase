@@ -17,8 +17,8 @@ global_init()
 
 origins = ["*"]
 
-tables_realised_str = "usa_states, serbia_states"
-tables_realised_list = ["usa_states", "serbia_states"]
+tables_realised_str = "usa_states, serbia_regions, italy_regions"
+tables_realised_list = ["usa_states", "serbia_regions", "italy_regions"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,16 +29,17 @@ app.add_middleware(
 )
 
 
-def create_leaderboard(tables):
+def create_leaderboard():
     session = create_session()
     try:
         response = {}
-        for table in tables:
+        for table in tables_realised_list:
             users = session.execute(
-                f"SELECT username, {table} FROM quiz_results JOIN users u on u.uid = quiz_results.id WHERE {table} "
+                f"SELECT username, {table}, {table + '_time'} FROM quiz_results JOIN users u on u.uid = quiz_results.id WHERE {table + '_time'} "
                 f"IS NOT NULL "
-                f"ORDER BY {table} DESC LIMIT 10").fetchall()
+                f"ORDER BY {table} DESC, {table + '_time'} ASC LIMIT 10").fetchall()
             response[table] = users
+
         return response
     except sqlalchemy.exc.NoResultFound:
         return "402"
@@ -147,7 +148,7 @@ def send_tokens(payload: RefreshTokenPd):
 @app.post("/users/leaderboard")
 def send_leaderboard(payload: LeaderboardPd):
     token = check_access_token(payload)
-    return create_leaderboard(payload.tables)
+    return create_leaderboard()
 
 
 def get_total_points(uid):
@@ -178,13 +179,17 @@ def send_all_results(payload: UserGetDataPd):
         for column in list(vars(data).keys())[1:]:
             if "id" not in column:
                 if "time" in column:
-                    if response[column.replace("_time", "")]:
-                        response[column.replace("_time", "")] = []
-                    response[column.replace("_time", "")].append({"time": getattr(data, column)})
+                    try:
+                        response[column.replace("_time", "")]
+                    except KeyError:
+                        response[column.replace("_time", "")] = {}
+                    response[column.replace("_time", "")]["time"] = getattr(data, column)
                 else:
-                    if not response[column]:
-                        response[column] = []
-                    response[column].append({"points": getattr(data, column)})
+                    try:
+                        response[column]
+                    except KeyError:
+                        response[column] = {}
+                    response[column]["points"] = getattr(data, column)
         return response
     except sqlalchemy.exc.NoResultFound:
         pass

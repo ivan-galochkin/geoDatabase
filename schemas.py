@@ -20,7 +20,9 @@ class QuizResultsSchema(Base):
     id = sa.Column(sa.Integer, sa.ForeignKey('users.uid'), unique=True, nullable=False)
     # points for every quiz
     usa_states = sa.Column(sa.Integer, default=0)
-    serbia_states = sa.Column(sa.Integer, default=0)
+    serbia_regions = sa.Column(sa.Integer, default=0)
+    italy_regions = sa.Column(sa.Integer, default=0)
     # time
-    usa_states_time = sa.Column(sa.Interval)
-    serbia_states_time = sa.Column(sa.Interval)
+    usa_states_time = sa.Column(sa.Time)
+    serbia_regions_time = sa.Column(sa.Time)
+    italy_regions_time = sa.Column(sa.Time)

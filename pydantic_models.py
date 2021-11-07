@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from datetime import timedelta
+from datetime import time
 
 
 class UserSignUpPd(BaseModel):
@@ -17,7 +17,7 @@ class QuizResultsPd(BaseModel):
     headers: dict
     quiz: str
     points: int
-    time: timedelta
+    time: time
 
 
 class RefreshTokenPd(BaseModel):
@@ -26,7 +26,6 @@ class RefreshTokenPd(BaseModel):
 
 class LeaderboardPd(BaseModel):
     headers: dict
-    tables: list
 
 
 class TestPd(BaseModel):
