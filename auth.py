@@ -1,3 +1,4 @@
+import jwt
 import sqlalchemy.exc
 from fastapi import FastAPI, Header, HTTPException
 
@@ -8,7 +9,7 @@ from schemas import UserSchema, QuizResultsSchema
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from password_service import verify_password, make_hashed_password
-from jwt_service import create_response, decode_jwt
+from jwt_service import create_response, decode_jwt, create_refresh_jwt
 import platform
 
 app = FastAPI()
@@ -65,6 +66,28 @@ def check_access_token(payload):
         raise HTTPException(status_code=401, detail="wrong token")
 
     return decoded_token
+
+
+def change_refresh_token(uid: int):
+    session = create_session()
+
+    try:
+        user = session.query(UserSchema).filter(UserSchema.uid == uid).one()
+        user.refresh_token = create_refresh_jwt(uid)
+        session.commit()
+    except sqlalchemy.exc.NoResultFound:
+        pass
+    finally:
+        session.close()
+
+
+def get_total_points(uid):
+    session = create_session()
+    try:
+        return sum(
+            list(session.execute(f"SELECT {tables_realised_str} FROM quiz_results WHERE uid = {uid}").fetchall()[0]))
+    except sqlalchemy.exc.NoResultFound:
+        pass
 
 
 @app.post("/users/sign_in", status_code=200)
@@ -130,8 +153,8 @@ def send_tokens(payload: RefreshTokenPd):
     refresh_token = payload.refresh_token
     try:
         jwt_service.decode_jwt(refresh_token)
-    except BaseException as exc:
-        print(exc)
+    except BaseException:
+        raise HTTPException(401, "fake token")
     session = create_session()
     try:
         db_user = session.query(UserSchema).filter(UserSchema.refresh_token == refresh_token).one()
@@ -142,32 +165,18 @@ def send_tokens(payload: RefreshTokenPd):
 
         return response
     except sqlalchemy.exc.NoResultFound:
-        raise HTTPException(status_code=401, detail='refresh_token expired')
+        change_refresh_token(jwt.decode(payload.refresh_token)['user_id'])
+        raise HTTPException(403, "relogin")
 
 
 @app.post("/users/leaderboard")
 def send_leaderboard(payload: LeaderboardPd):
-    token = check_access_token(payload)
     return create_leaderboard()
-
-
-def get_total_points(uid):
-    session = create_session()
-    try:
-        return sum(
-            list(session.execute(f"SELECT {tables_realised_str} FROM quiz_results WHERE uid = {uid}").fetchall()[0]))
-    except sqlalchemy.exc.NoResultFound:
-        pass
 
 
 @app.post("/users/total-points")
 def send_total_points(payload: UserGetDataPd):
     return get_total_points(payload.uid)
-
-
-@app.post("/users/profile-photo")
-def send_photo(payload: UserUidPd):
-    pass
 
 
 @app.post("/users/all_results")
