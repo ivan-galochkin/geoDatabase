@@ -165,7 +165,7 @@ def send_tokens(payload: RefreshTokenPd):
 
         return response
     except sqlalchemy.exc.NoResultFound:
-        change_refresh_token(jwt.decode(payload.refresh_token)['user_id'])
+        # change_refresh_token(jwt.decode(payload.refresh_token)['user_id'])
         raise HTTPException(403, "relogin")
 
 
